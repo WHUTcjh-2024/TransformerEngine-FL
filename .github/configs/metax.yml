@@ -29,6 +29,8 @@ container_volumes:
 # LD_LIBRARY_PATH comes from the image (MACA base: /opt/maca/lib:/opt/maca/mxgpu_llvm/lib).
 # Do not pass -e LD_LIBRARY_PATH here: docker receives these options unexpanded,
 # so a value here replaces the image's and torch then cannot load libmxomp.so.
+# The MetaX PyTorch build does not register `mccl` as a torch.distributed backend.
+# Use the NCCL-compatible backend name exposed by the MetaX image.
 container_options: >-
   --hostname=te_cicd
   --ipc=host
@@ -39,8 +41,6 @@ container_options: >-
   --ulimit nofile=65535:65535
   --group-add video
   -e PLATFORM=metax
-  # This PyTorch build does not register `mccl` as a torch.distributed backend.
-  # Use the NCCL-compatible backend name exposed by the MetaX image.
   -e DISTRIBUTED_BACKEND=nccl
 
 # Platform-specific environment setup script
