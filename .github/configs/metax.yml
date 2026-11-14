@@ -39,8 +39,9 @@ container_options: >-
   --ulimit nofile=65535:65535
   --group-add video
   -e PLATFORM=metax
-  -e DISTRIBUTED_BACKEND=mccl
-  -e TORCH_DISTRIBUTED_BACKEND=mccl
+  # This PyTorch build does not register `mccl` as a torch.distributed backend.
+  # Use the NCCL-compatible backend name exposed by the MetaX image.
+  -e DISTRIBUTED_BACKEND=nccl
 
 # Platform-specific environment setup script
 setup_script: .github/scripts/setup_metax.sh
